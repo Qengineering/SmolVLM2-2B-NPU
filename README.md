@@ -231,5 +231,5 @@ Porting the vision module of SmolVLM2 to rknn requires modifications to the inte
 Specifically, the indices for the Gather operation must be converted from a floating-point (FP16) data type to an integer. Please refer to the following image for an example.<br>
 
 
-<img width="500" height="437" alt="Screenshot from 2025-10-28 10-19-46" src="https://github.com/user-attachments/assets/e52075bd-b800-4fac-92b9-feea5f1e18fb" />
-<img width="500" height="437" alt="Screenshot from 2025-10-28 10-20-45" src="https://github.com/user-attachments/assets/621ec0ba-f5d7-451b-beb2-3a6dc2cdf08c" />
+<img width="250" height="219" alt="Screenshot from 2025-10-28 10-19-46" src="https://github.com/user-attachments/assets/e52075bd-b800-4fac-92b9-feea5f1e18fb" />
+<img width="250" height="219" alt="Screenshot from 2025-10-28 10-20-45" src="https://github.com/user-attachments/assets/621ec0ba-f5d7-451b-beb2-3a6dc2cdf08c" />
