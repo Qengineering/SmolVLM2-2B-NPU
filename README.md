@@ -1,21 +1,25 @@
-# InternVL3 NPU
+# SmolVLM2-2.2B NPU
 ![Alt text](https://github.com/user-attachments/assets/6d297a34-c516-4cb1-be4a-bca471d40fa6)
 <br><br>**User**:\<image\>Describe the image.<br><br>
-**Answer**: The image depicts an astronaut in a white space suit lounging on the moon's surface with a green bottle of soda in hand. The background features Earth from space and part of a lunar module, suggesting a surreal scene. The setting is dramatic, with the vastness of space surrounding the astronaut and the Moon itself.
+**Answer**: In this captivating digital painting, an astronaut is comfortably seated on the surface of the moon, with their feet propped up on a green cooler. The astronaut, clad in a pristine white spacesuit, has a relaxed posture, suggesting they are enjoying a leisurely moment away from the hustle and bustle of space exploration.
+
+The backdrop to this tranquil scene is a breathtaking view of Earth, which is visible in the distance. The planet's blue oceans contrast beautifully with its brown landmasses, while its white clouds add depth to the atmosphere. The moon itself forms a stark, cratered landscape that serves as an excellent contrast to the vibrant colors of Earth.
+
+The astronaut's gaze is directed towards the Earth, indicating their fascination with our home planet. Their relaxed demeanor and the presence of the cooler suggest they might be taking a break from their spacewalk or perhaps enjoying a well-deserved moment on the lunar surface. The painting beautifully captures this serene moment in space exploration, highlighting both the astronaut's peaceful solitude and the awe-inspiring beauty of Earth.
 
 ------------
 
-## InternVL3 VLM for RK3588 NPU (Rock 5, Orange Pi 5). <br/>
+## SmolVLM2-2.2B VLM for RK3588 NPU (Rock 5, Orange Pi 5). <br/>
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)<br/><br/>
-Paper: [InternVL3: Exploring Advanced Training and Test-Time Recipes for Open-Source Multimodal Models](https://arxiv.org/pdf/2504.10479)<br/><br/>
-Hugging face: https://huggingface.co/OpenGVLab/InternVL3-78B
+Paper: https://huggingface.co/blog/smolvlm2
+Hugging face: https://huggingface.co/blog/smolvlm2
 
 ------------
 
 ## Introduction
 
 LLMs (Large Language Models) are neural networks trained on large text datasets to understand and generate language.<br>
-VLMs (Vision-Language Models) add a visual encoder so the model can process images and text together.<br> 
+VLMs (Vision-Language Models) add a visual encoder, enabling the model to process images and text together.<br> 
 A combined VLM+LLM system is often referred to as a multimodal model.
 
 These models can be large—hundreds of millions to billions of parameters—which impacts accuracy, memory use, and runtime speed.<br>
@@ -24,7 +28,7 @@ Because of this, models typically need to be quantised or simplified to fit.
 
 Performance is usually expressed in tokens (words) per second.<br>
 Once converted to RKNN, parts of the model can run on the NPU, improving speed.<br>
-Despite these limits, models like InternVL3 run well on the RK3588 because the NPU efficiently accelerates the heavy math, and the vision encoder can be optimised. This makes advanced multimodal AI feasible on small, power-efficient devices.
+Despite these limits, models like SmolVLM2-2B run well on the RK3588 because the NPU efficiently accelerates the heavy math, and the vision encoder can be optimised. This makes advanced multimodal AI feasible on small, power-efficient devices.
 
 ------------
 
@@ -33,17 +37,20 @@ Despite these limits, models like InternVL3 run well on the RK3588 because the N
 All models, with C++ examples, can be found on the Q-engineering GitHub.<br><br>
 All LLM models are quantized to **w8a8**, while the VLM vision encoders use **fp16**.<br>
 
-| model         | RAM (GB) | llm cold sec<sup>1</sup> | llm warm sec<sup>2</sup> | vlm cold sec<sup>1</sup> | vlm warm sec<sup>2</sup> | Resolution | Tokens/s |
+| model         | RAM (GB)<sup>1</sup> | llm cold sec<sup>2</sup> | llm warm sec<sup>3</sup> | vlm cold sec<sup>2</sup> | vlm warm sec<sup>3</sup> | Resolution | Tokens/s |
 | --------------| :--: | :-----: | :-----: | :--------: | :-----: | :--------:  | :--------: |
-| Qwen2         | | 29.1 |   2.5 | 17.1  | 1.7 | 392 x 392 | 12.5 |
+| Qwen2         | 3.3 | 29.1 |   2.5 | 17.1  | 1.7 | 392 x 392 | 12.5 |
 | InternVL3-1B  | 1.3 |  6.8 |   1.1 | 7.8    | 0.75 | 448 x 448 | 30 |
-| SmolVLM2-2.2B | 3.5 | 21.2 |   2.6 | 10.5   | 0.9  | 392 x 392 | 11 |
-| SmolVLM2-500M | |  4.8 |   0.7 | 2.5    | 0.25 | 392 x 392 | 31 |
+| SmolVLM2-2.2B | 3.4 | 21.2 |   2.6 | 10.5   | 0.9  | 384 x 384 | 11 |
+| SmolVLM2-500M | 0.8 |  4.8 |   0.7 | 2.5    | 0.25 | 392 x 392 | 31 |
 | SmolVLM2-256M | 0.5 |  1.1 |   0.4 | 2.5    | 0.25 | 392 x 392 | 54 |
 
-<sup>1</sup> When an llm/vlm model is loaded for the first time from your disk to RAM or NPU, it is called a cold start.<br>
-The duration depends on your OS, I/O transfer rate, and memory mapping.<br><br> 
-<sup>2</sup> Subsequent loading (warm start) takes advantage of the already mapped data in RAM. Mostly, only a few pointers need to be restored.<br>
+<sup>1</sup> The total used memory; LLM plus the VLM. <br>
+<sup>2</sup> When an llm/vlm model is loaded for the first time from your disk to RAM or NPU, it is called a cold start.<br>
+The duration depends on your OS, I/O transfer rate, and memory mapping.<br> 
+<sup>3</sup> Subsequent loading (warm start) takes advantage of the already mapped data in RAM. Mostly, only a few pointers need to be restored.<br><br>
+<img width="600" height="450" alt="vlm_memory_vs_mmmu" src="https://github.com/user-attachments/assets/a6f0df78-fee8-4e19-9e30-aef9305af670" /><br>
+
 
 ------------
 
@@ -71,24 +78,23 @@ $ sudo apt-get install lib-opencv-dev
 
 ## Installing the app.
 ```
-$ git clone https://github.com/Qengineering/InternVL3-NPU.git
+$ git clone https://github.com/Qengineering/SmolVLM2-2B-NPU.git
 ```
 
 #### RKLLM, RKNN
-To run InternVL3, you need to have the **rkllm-runtime** library version **1.2.2** (or higher) installed, as well as the **rknpu driver** version **0.9.8**.<br>
+To run SmolVLM2-2B, you need to have the **rkllm-runtime** library version **1.2.2** (or higher) installed, as well as the **rknpu driver** version **0.9.8**.<br>
 If you don't have these on your machine, or if you have a lower version, you need to install them.<br>
 We have provided the correct versions in the repo.<br>
 ```bash
-$ cd ./InternVL3-NPU/aarch64/library
+$ cd ./SmolVLM2-2B-NPU/aarch64/library
 $ sudo cp ./*.so /usr/local/lib
-$ cd ./InternVL3-NPU/aarch64/include
+$ cd ./SmolVLM2-2B-NPU/aarch64/include
 $ sudo cp ./*.h /usr/local/include
 ```
 ### Download the LLM and VLM model.
 The next step is downloading the models.<br>
-This time, we used the original model supplied by Rockchips [rkllm_model_zoo](https://console.box.lenovo.com/l/l0tXb8) (44 GB!), fetch code: rkllm.<br><br>
-Better to download only the two needed files (1.5 GB) from our Sync.com server:<br>
-[internvl3-1b_w8a8_rk3588.rkllm](https://ln5.sync.com/dl/2ac529d30#49g27fih-qe8mjmu9-prmas7px-uuyua5te) and [internvl3-1b_vision_fp16_rk3588.rknn](https://ln5.sync.com/dl/b565d2360#wmbmdbum-tk36pehc-5t4irskd-7gb6kfti)<br>
+Download the two files (1.5 GB) from our Sync.com server:<br>
+[smolvlm2-2.2b-instruct_w8a8_rk3588.rkllm](https://ln5.sync.com/dl/2ac529d30#49g27fih-qe8mjmu9-prmas7px-uuyua5te) and [smolvlm2-2.2b_vision_fp16_rk3588.rknn](https://ln5.sync.com/dl/b565d2360#wmbmdbum-tk36pehc-5t4irskd-7gb6kfti)<br>
 Copy both to your `./model` folder.
 
 ### Building the app.
@@ -127,7 +133,7 @@ This specifies the maximum total number of tokens the model can process in one g
 
 A typical command line can be:
 ```bash
-VLM_NPU ./Moon.jpg ./models/internvl3-1b_vision_fp16_rk3588.rknn ./models/internvl3-1b_w8a8_rk3588.rkllm 2048 4096
+VLM_NPU ./Moon.jpg ./models/SmolVLM2-2B-1b_vision_fp16_rk3588.rknn ./models/SmolVLM2-2B-1b_w8a8_rk3588.rkllm 2048 4096
 ```
 The NewTokens (2048) and ContextLength (4096) are optional and can be omitted.
 ### Using the app.
@@ -186,62 +192,33 @@ std::cout << "\nLLM Answer: " << output_str << std::endl;
 ## VLM examples.
 | Image         | Dialog |
 | --------------| --  |
-| ![Singapore_S](https://github.com/user-attachments/assets/e742059a-3bdb-41be-9647-e7767da12ce6) |**User**: <image>Which city is this?<br>**Answer**: This image shows Singapore's iconic skyline at sunset. The distinctive Marina Bay Sands and the ArtScience Museum are prominent landmarks in Singapore. | 
-| ![ChineseWall_S](https://github.com/user-attachments/assets/3ba4b57a-4b22-4050-b995-9599c6d239de) |**User**: <image>Tell me something about the history of this place.<br>**Answer**: The Great Wall of China is an ancient defensive structure that has been built over thousands of years to protect against invasions from northern nomadic tribes. The wall stretches across central China, connecting the north and south of the country. It was constructed by the Chinese dynasties during the Qin Dynasty (221-206 BCE) and later expanded under various rulers including the Ming Dynasty (1368-1644). The Great Wall is not only a testament to engineering prowess but also a symbol of China's historical resilience and cultural heritage.|
-| ![Pizza_S](https://github.com/user-attachments/assets/26fd5da3-f491-4b48-978a-14eae0819247) |**User**: <image>What are the ingredients I need to make this?<br>**Answer**: To make this pizza, you'll need:<br>1. **Pizza Dough**: This is typically made from flour, water, yeast, and other ingredients.<br> 2. **Tomato Sauce**: A rich tomato-based sauce that provides flavor and color.<br> 3. **Cheese**: Mozzarella or another type of cheese for the melted cheese topping.<br> 4. **Fresh Basil Leaves**: For garnish and added freshness.<br>You can also add toppings like pepperoni, mushrooms, olives, or meats depending on your preference.<br><br>**User**: What is the first step?<br>**Answer**: The first step to making this pizza involves preparing the dough. Here's what you'll need:<br>1. **Prepare the Dough**:<br>**Ingredients**:<br>2 cups of all-purpose flour<br>3 teaspoons of active dry yeast<br>4 tablespoons of warm water (around 105°F to 115°F)<br>1 teaspoon of salt<br>**Instructions**:<br>1. In a large mixing bowl, combine the flour and salt.<br>2. Add the warm water and yeast mixture, stirring until the dough starts to come together.<br>3. Knead the dough on a floured surface for about 5 minutes, until it becomes smooth and elastic.<br>4. Place the dough in a lightly oiled bowl, cover with a damp cloth, and let it rise in a warm place for about 1 hour, or until doubled in size.<br>This will give you a soft, elastic pizza crust that will be great for your delicious homemade pizza!|
-| ![Titanic_S](https://github.com/user-attachments/assets/bf6da76c-c9a4-41c6-bea1-2b4411dd4013) |**User**: <image>Which movie is this?<br>**Answer**: This image appears to be from the movie "The Little Mermaid." It shows two characters on a ship at sunset, with one reaching out towards the sea. The setting and costumes suggest it's from the Disney film series.|
+| ![Singapore_S](https://github.com/user-attachments/assets/e742059a-3bdb-41be-9647-e7767da12ce6) |**User**: <image>Which city is this?<br>**Answer**: The image you've shared appears to be of the Singapore skyline at dusk, with the iconic Marina Bay Sands hotel and the Singapore Flyer Ferris wheel prominently featured. The colors in the photo are warm and inviting, with a mix of orange, yellow, and blue hues reflecting off the water's surface. This time-lapse effect gives the impression that the city is alive and bustling even though it's just dusk.<br<<br>Singapore is known for its modern architecture, vibrant culture, and diverse population. The Marina Bay Sands hotel is a luxury resort complex located in the heart of Singapore, featuring three interconnected towers with a distinctive shape inspired by the shape of a sail. The Singapore Flyer Ferris wheel, on the other hand, is one of the tallest Ferris wheels in the world, offering panoramic views of the city skyline and the surrounding waterfront.<br><br>Singapore's economy is driven by its strong financial sector, with major industries including manufacturing, services, and tourism. The country has also made significant strides in areas like technology, healthcare, and education. Its strategic location at the tip of the Malay Peninsula makes it a hub for trade and commerce between Asia and Europe.<br><br>Overall, the image captures the essence of Singapore's modern cityscape, blending natural beauty with human-made marvels to create a unique urban landscape. | 
+| ![ChineseWall_S](https://github.com/user-attachments/assets/3ba4b57a-4b22-4050-b995-9599c6d239de) |**User**: <image>Tell me something about the history of this place.<br>**Answer**: The Great Wall of China, also known as the "Ming Great Wall," is one of the most iconic and historically significant structures in the world. It stretches over 4,000 miles (6,400 km) across northern China, from Shanhai Pass in the east to Mutianyu in the west. The wall was built during the Ming Dynasty (1368-1644), which is why it's often referred to as the "Ming Great Wall."<br><br>The construction of the wall began around 200 BCE and continued for over 500 years, with various rulers adding to its length and strength. The primary purpose of the wall was to protect China from invasions by nomadic tribes from Central Asia. However, it also served as a symbol of Chinese power and unity, and played a significant role in the country's military strategy during the Ming Dynasty.<br><br>The wall is made up of stone, brick, tamped earth, and wood, with some sections featuring watchtowers and beacon towers that could be used to communicate over long distances. The wall was built using local materials, such as limestone, sandstone, and granite, which were quarried from nearby mountains.<br><br>Over time, the wall has undergone several renovations and restorations, with many sections being rebuilt or repaired during different periods of Chinese history. Despite its age, the Great Wall remains an impressive feat of engineering and a testament to China's rich cultural heritage.<br><br>Today, the Great Wall is one of the most popular tourist destinations in China, attracting millions of visitors each year. It's also a UNESCO World Heritage Site, recognized for its cultural and historical significance. The wall has been featured in numerous films, books, and other media, cementing its place as an iconic symbol of Chinese culture and history.|
+| ![Pizza_S](https://github.com/user-attachments/assets/26fd5da3-f491-4b48-978a-14eae0819247) |**User**: <image>What are the ingredients I need to make this?<br>**Answer**: To create this delicious pizza, you will need:<br>1. **Pizza Dough**: You can use a homemade or store-bought pizza dough for this recipe. Make sure it's freshly baked and has a golden crust.<br>2. **Tomato Sauce**: Use a high-quality tomato sauce that is made with fresh tomatoes and herbs. Avoid using canned sauces as they often contain added preservatives.<br>3. **Mozzarella Cheese**: Fresh mozzarella cheese is the best choice for this pizza. You can use either fresh mozzarella or low-moisture mozzarella if you prefer a crisper crust.<br>4. **Basil Leaves**: Fresh basil leaves are essential for adding flavor and aroma to your pizza. You can also use dried basil if fresh is not available.<br>5. **Olive Oil**: A drizzle of olive oil will enhance the flavors of your pizza. It's best to use extra virgin olive oil for its high-quality flavor.<br>6. **Salt and Pepper**: To taste, season your pizza with salt and pepper to balance out the flavors.<br>Optional ingredients:<br>- **Pepperoni or Sausage**: Add some meatiness to your pizza by using pepperoni or sausage slices.<br>- **Onions**: Thinly sliced onions can add a sweet and savory flavor.<br>- **Garlic**: Minced garlic can be added for an extra layer of flavor.<br>- **Cheese Grits**: A sprinkle of cheese grits can provide a crunchy texture and additional flavor.<br><br>Remember, the key to making a great pizza is using high-quality ingredients and letting them meld together in the oven. Enjoy your homemade pizza!<br><br>**User**: What is the first step?<br>**Answer**: The first step to making this delicious pizza is to prepare the pizza dough. You can either make your own from scratch or use a store-bought pizza dough. If you're using store-bought, follow the instructions on the packaging for how to warm it up before baking.<br>Here's a simple recipe for homemade pizza dough:<br><br>Ingredients:<br>- 2 cups of warm water<br>- 1 packet (or 1/4 cup) of active dry yeast<br>- 3 tablespoons of sugar<br>- 4 cups of all-purpose flour<br>- 1 teaspoon of salt<br>- 1 tablespoon of olive oil<br><br>Instructions:<br>1. In a large mixing bowl, combine the warm water and yeast. Let it sit for about 5 minutes until the mixture becomes frothy.<br>2. Add the sugar to the yeast mixture and stir well.<br>3. Gradually add in the flour, one cup at a time, until the dough comes together in a ball.<br>4. Knead the dough on a floured surface for about 10 minutes until it becomes smooth and elastic.<br>5. Place the dough in a greased bowl, cover it with plastic wrap or a damp cloth, and let it rise in a warm place for about 1 hour, or until it has doubled in size.<br>6. Preheat your oven to 425°F (220°C) with a baking stone or baking sheet inside if you have one.<br>7. Punch down the dough and shape it into your desired pizza shape.<br>8. Place the pizza on a baking sheet lined with parchment paper and bake for about 12-15 minutes, or until the crust is golden brown and the cheese is melted and bubbly.<br><br>Once you've prepared the dough, you can start adding your favorite toppings!|
+| ![Titanic_S](https://github.com/user-attachments/assets/bf6da76c-c9a4-41c6-bea1-2b4411dd4013) |**User**: <image>Which movie is this?<br>**Answer**: This image appears to be from the movie "The Prestige" directed by Christopher Nolan, which was released in 2006. The scene shows two characters standing on a boat or ship during sunset with their arms outstretched as if they are embracing each other. This pose is often associated with romantic gestures and can symbolize love, connection, or the idea of being lost at sea. The image captures the essence of the film's themes of obsession, rivalry, and the lengths people will go to achieve their goals.|
 
 ## LLM example.
 Notice the nice Markdown makeup of the answer!<br><br>
 **User**: Can you make me a C++ call that embeds the Pythagorean theorem?<br><br>
-**Answer**: Certainly! The Pythagorean theorem is a fundamental principle in geometry stating that in a right-angled triangle, the square of the length of the hypotenuse (the side opposite the right angle) is equal to the sum of the squares of the lengths of the other two sides. In mathematical terms:
-
-\[ c^2 = a^2 + b^2 \]
-
-where \( c \) is the length of the hypotenuse, and \( a \) and \( b \) are the lengths of the other two sides.
-
-To implement this in C++, you can use the following code snippet. This example will calculate the distance between two points using the Pythagorean theorem:
-
+**Answer**: Here's a simple C++ function that calculates the length of the hypotenuse (the longest side) in a right triangle using the Pythagorean theorem:
 ```cpp
 #include <iostream>
-#include <cmath> // For sqrt function
+using namespace std;
 
-// Function to calculate the Euclidean distance between two points (x1, y1) and (x2, y2)
-double calculateDistance(double x1, double y1, double x2, double y2) {
-    return std::sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+double calculateHypotenuse(double a, double b) {
+    return sqrt(a * a + b * b);
 }
 
 int main() {
-    // Coordinates of the two points
-    double x1 = 3.0;
-    double y1 = 4.0;
-    double x2 = 6.0;
-    double y2 = 8.0;
-
-    // Calculate the distance using the Pythagorean theorem
-    double distance = calculateDistance(x1, y1, x2, y2);
-
-    // Output the result
-    std::cout << "The distance between points (" << x1 << ", " << y1 << ") and (" << x2 << ", " << y2 << ") is: " << distance << std::endl;
-
+    double sideA = 3.0; // example values for the sides of the triangle
+    double sideB = 4.0;
+    double hypotenuse = calculateHypotenuse(sideA, sideB);
+    cout << "The length of the hypotenuse is: " << hypotenuse << endl;
     return 0;
 }
 ```
-
-### Explanation:
-1. **Include Necessary Headers**: The `#include <iostream>` header is used for input-output operations, and the `#include <cmath>` header provides access to mathematical functions like `sqrt`.
-
-2. **Function Definition**:
-   - `double calculateDistance(double x1, double y1, double x2, double y2)`: This function takes four parameters representing the coordinates of two points in a 2D plane and returns the Euclidean distance between them.
-
-3. **Main Function**:
-   - The main function initializes the coordinates of the two points.
-   - It then calls `calculateDistance` to compute the distance using the Pythagorean theorem.
-   - Finally, it prints out the calculated distance.
-
-This code will output the distance between the points (3, 4) and (6, 8), which is approximately 5.196152.
-
-Feel free to modify the coordinates or use this as a starting point for other geometric calculations!
+This function takes two arguments `a` and `b`, which represent the lengths of the other two sides of the triangle. It returns the square root of the sum of the squares of these two sides, which is the length of the hypotenuse. In this example, we're using it to find the length of the hypotenuse when one side has a length of 3 and the other has a length of 4.
+Note that this function assumes that the input values are valid (i.e., they represent positive lengths). If you want to add error checking or validation, you can modify the function accordingly.
 
 ------------
 
