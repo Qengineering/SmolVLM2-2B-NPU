@@ -42,8 +42,8 @@ All LLM models are quantized to **w8a8**, while the VLM vision encoders use **fp
 | Qwen2         | 3.3 | 29.1 |   2.5 | 17.1  | 1.7 | 392 x 392 | 12.5 |
 | InternVL3-1B  | 1.3 |  6.8 |   1.1 | 7.8    | 0.75 | 448 x 448 | 30 |
 | SmolVLM2-2.2B | 3.4 | 21.2 |   2.6 | 10.5   | 0.9  | 384 x 384 | 11 |
-| SmolVLM2-500M | 0.8 |  4.8 |   0.7 | 2.5    | 0.25 | 392 x 392 | 31 |
-| SmolVLM2-256M | 0.5 |  1.1 |   0.4 | 2.5    | 0.25 | 392 x 392 | 54 |
+| SmolVLM2-500M | 0.8 |  4.8 |   0.7 | 2.5    | 0.25 | 384 x 384 | 31 |
+| SmolVLM2-256M | 0.5 |  1.1 |   0.4 | 2.5    | 0.25 | 384 x 384 | 54 |
 
 <sup>1</sup> The total used memory; LLM plus the VLM. <br>
 <sup>2</sup> When an llm/vlm model is loaded for the first time from your disk to RAM or NPU, it is called a cold start.<br>
