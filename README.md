@@ -49,8 +49,7 @@ All LLM models are quantized to **w8a8**, while the VLM vision encoders use **fp
 <sup>2</sup> When an llm/vlm model is loaded for the first time from your disk to RAM or NPU, it is called a cold start.<br>
 The duration depends on your OS, I/O transfer rate, and memory mapping.<br> 
 <sup>3</sup> Subsequent loading (warm start) takes advantage of the already mapped data in RAM. Mostly, only a few pointers need to be restored.<br><br>
-<img width="600" height="450" alt="vlm_memory_vs_mmmu" src="https://github.com/user-attachments/assets/a6f0df78-fee8-4e19-9e30-aef9305af670" /><br>
-
+<img width="600" height="450" alt="Figure_1" src="https://github.com/user-attachments/assets/1c25935a-742d-4930-854a-230ecb6543b7" /><br>
 
 ------------
 
