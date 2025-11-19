@@ -39,11 +39,11 @@ All LLM models are quantized to **w8a8**, while the VLM vision encoders use **fp
 
 | model         | RAM (GB)<sup>1</sup> | llm cold sec<sup>2</sup> | llm warm sec<sup>3</sup> | vlm cold sec<sup>2</sup> | vlm warm sec<sup>3</sup> | Resolution | Tokens/s |
 | --------------| :--: | :-----: | :-----: | :--------: | :-----: | :--------:  | :--------: |
-| Qwen2         | 3.3 | 29.1 |   2.5 | 17.1  | 1.7 | 392 x 392 | 12.5 |
-| InternVL3-1B  | 1.3 |  6.8 |   1.1 | 7.8    | 0.75 | 448 x 448 | 30 |
-| SmolVLM2-2.2B | 3.4 | 21.2 |   2.6 | 10.5   | 0.9  | 384 x 384 | 11 |
-| SmolVLM2-500M | 0.8 |  4.8 |   0.7 | 2.5    | 0.25 | 384 x 384 | 31 |
-| SmolVLM2-256M | 0.5 |  1.1 |   0.4 | 2.5    | 0.25 | 384 x 384 | 54 |
+| [Qwen2](https://github.com/Qengineering/Qwen2-NPU)         | 3.3 | 29.1 |   2.5 | 17.1  | 1.7 | 392 x 392 | 12.5 |
+| [InternVL3-1B](https://github.com/Qengineering/InternVL3-NPU)  | 1.3 |  6.8 |   1.1 | 7.8    | 0.75 | 448 x 448 | 30 |
+| [SmolVLM2-2.2B](https://github.com/Qengineering/SmolVLM2-2B-NPU) | 3.4 | 21.2 |   2.6 | 10.5   | 0.9  | 384 x 384 | 11 |
+| [SmolVLM2-500M](https://github.com/Qengineering/SmolVLM2-500M-NPU) | 0.8 |  4.8 |   0.7 | 2.5    | 0.25 | 384 x 384 | 31 |
+| [SmolVLM2-256M](https://github.com/Qengineering/SmolVLM2-256M-NPU) | 0.5 |  1.1 |   0.4 | 2.5    | 0.25 | 384 x 384 | 54 |
 
 <sup>1</sup> The total used memory; LLM plus the VLM. <br>
 <sup>2</sup> When an llm/vlm model is loaded for the first time from your disk to RAM or NPU, it is called a cold start.<br>
