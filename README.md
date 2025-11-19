@@ -18,8 +18,8 @@ Hugging face: https://huggingface.co/blog/smolvlm2
 
 ## Introduction
 
-LLMs (Large Language Models) are neural networks trained on large text datasets to understand and generate language.<br>
-VLMs (Vision-Language Models) add a visual encoder, enabling the model to process images and text together.<br> 
+LLMs (Large Language Models) are neural networks trained on extensive text datasets to comprehend and produce language.<br>
+VLMs (Vision-Language Models) incorporate a visual encoder, allowing the model to process images and text simultaneously.<br> 
 A combined VLM+LLM system is often referred to as a multimodal model.
 
 These models can be large—hundreds of millions to billions of parameters—which impacts accuracy, memory use, and runtime speed.<br>
@@ -28,7 +28,7 @@ Because of this, models typically need to be quantised or simplified to fit.
 
 Performance is usually expressed in tokens (words) per second.<br>
 Once converted to RKNN, parts of the model can run on the NPU, improving speed.<br>
-Despite these limits, models like SmolVLM2-2B run well on the RK3588 because the NPU efficiently accelerates the heavy math, and the vision encoder can be optimised. This makes advanced multimodal AI feasible on small, power-efficient devices.
+Despite these limits, models like SmolVLM2-2.B run well on the RK3588 because the NPU efficiently accelerates the heavy math, and the vision encoder can be optimised. This makes advanced multimodal AI feasible on small, power-efficient devices.
 
 ------------
 
@@ -223,7 +223,6 @@ Note that this function assumes that the input values are valid (i.e., they repr
 ------------
 
 [![paypal](https://qengineering.eu/images/TipJarSmall4.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CPZTM5BB3FCYL) 
-
 
 ------------
 ## Appendix.
